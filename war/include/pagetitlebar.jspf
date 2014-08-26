@@ -1,0 +1,65 @@
+<%@ page import="com.infinite.share.Application" %>
+<%@ page import="com.infinite.share.auth.User" %>
+<%@ page import="com.infinite.share.auth.UserSession" %>
+<%@ page import="com.infinite.share.net.http.HomePages" %>
+<%@ page import="com.infinite.share.net.http.admin.AdminPages" %>
+<%@ page import="com.infinite.share.net.http.auth.AuthPages" %>
+
+<% User loggedInUser = ((request.getSession(false) == null) || (UserSession.getUser(session) == null)) ? (null) : (UserSession.getUser(session));
+   if (loggedInUser == null)
+   {
+%>    <div id="header">
+         <img class="logo" src="/img/logo/infinite_64.png" />
+         <span class="title"><%=Application.getApplicationName()%></span>
+         <div class="user">
+            <table>
+               <tr>
+                  <td></td>
+                  <td><a href="<%=AuthPages.signIn()%>" style="color: #C0C0C0">Sign in</a></td>
+                  <td></td>
+               </tr>
+            </table>
+         </div>
+      </div>
+<% }
+   else
+   {
+%>    <div id="header">
+         <img class="logo" src="/img/logo/infinite_64.png" />
+         <span class="title"><%=Application.getApplicationName()%></span>
+         <div class="user">
+            <table>
+               <tr>
+                  <td><img src="/img/ico/user_12.png"/></td>
+                  <td><%=loggedInUser.getImmutableUserId()%></td>
+                  <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/menu/menuopened_lightgray_12.png"/></a></td>
+               </tr>
+            </table>
+         </div>
+         <br/>
+         <div class="user_menu" id="logOutMenu">
+            <table>
+<%    if (loggedInUser.hasAdministrationRights())
+      {
+%>             <tr>
+                  <td><img src="/img/action/admin_12.png"/></td>
+                  <td><a href="<%=AdminPages.admin()%>">Admin. Console</a></td>
+               </tr>
+<%    }
+%>             <tr>
+                  <td><img src="/img/action/invite_12.png"/></td>
+                  <td><a href="<%=AuthPages.invite()%>">Invite a Friend</a></td>
+               </tr>
+               <tr>
+                  <td><img src="/img/action/lock_12.png"/></td>
+                  <td><a href="<%=AuthPages.changePassword()%>">Change Password</a></td>
+               </tr>
+               <tr>
+                  <td><img src="/img/action/signout_12.png"/></td>
+                  <td><a href="<%=AuthPages.signOut()%>">Sign out</a></td>
+               </tr>
+            </table>
+         </div>
+      </div>
+<% }
+%>

@@ -1,0 +1,2 @@
+﻿<%@include file="/include/pagetitlebar.jspf"%>
+<%@include file="/include/pagetoolbar.jspf"%>

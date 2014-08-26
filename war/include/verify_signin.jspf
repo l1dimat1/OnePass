@@ -1,0 +1,7 @@
+﻿<%@include file="/include/read_session.jspf"%>
+
+<% if (!UserSession.isSignedIn(session))
+   {
+%>    <jsp:forward page="<%=AuthPages.signIn()%>" />
+<% }
+%>

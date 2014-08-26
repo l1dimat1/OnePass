@@ -1,0 +1,4 @@
+﻿<%@include file="/include/read_session.jspf"%>
+
+<% UserSession.signOut(session);
+%>

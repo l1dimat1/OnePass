@@ -1,0 +1,10 @@
+﻿<%@page import="com.infinite.share.auth.User" %>
+<%@page import="com.infinite.share.auth.UserSession" %>
+<%@page import="com.infinite.share.net.http.auth.AuthPages" %>
+
+<% session = request.getSession(false);
+   if (request.getSession(false) == null)
+   {
+%>    <jsp:forward page="<%=AuthPages.signIn()%>" />
+<% }
+%>

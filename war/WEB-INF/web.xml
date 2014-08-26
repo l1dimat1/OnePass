@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+   <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+   </welcome-file-list>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>all</web-resource-name>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <user-data-constraint>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <session-config>
+      <session-timeout>2</session-timeout>
+   </session-config>
+   
+   <listener>
+      <listener-class>com.infinite.share.Application</listener-class>
+   </listener>
+   <listener>
+      <listener-class>com.infinite.onepass.OnePass</listener-class>
+   </listener>
+   
+   <servlet>
+      <servlet-name>SignUp</servlet-name>
+      <servlet-class>com.infinite.share.net.http.auth.SignUpServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>SignUp</servlet-name>
+      <url-pattern>/auth/signup</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>Invite</servlet-name>
+      <servlet-class>com.infinite.share.net.http.auth.InviteServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>Invite</servlet-name>
+      <url-pattern>/auth/invite</url-pattern>
+   </servlet-mapping>
+      
+	<servlet>
+		<servlet-name>SignIn</servlet-name>
+		<servlet-class>com.infinite.share.net.http.auth.SignInServlet</servlet-class>
+	</servlet>
+   <servlet-mapping>
+      <servlet-name>SignIn</servlet-name>
+      <url-pattern>/auth/signin</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>ChangePassword</servlet-name>
+      <servlet-class>com.infinite.share.net.http.auth.ChangePasswordServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>ChangePassword</servlet-name>
+      <url-pattern>/auth/changepassword</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>InvitationCleanUp</servlet-name>
+      <servlet-class>com.infinite.share.net.http.admin.InvitationCleanUpServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>InvitationCleanUp</servlet-name>
+      <url-pattern>/admin/invcleanup</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>SaveSite</servlet-name>
+      <servlet-class>com.infinite.onepass.net.http.sites.SaveSiteServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>SaveSite</servlet-name>
+      <url-pattern>/onepass/sites/savesite</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>DeleteSite</servlet-name>
+      <servlet-class>com.infinite.onepass.net.http.sites.DeleteSiteServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>DeleteSite</servlet-name>
+      <url-pattern>/onepass/sites/deletesite</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+      <servlet-name>GetSiteProperty</servlet-name>
+      <servlet-class>com.infinite.onepass.net.http.sites.GetSitePropertyServlet</servlet-class>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>GetSiteProperty</servlet-name>
+      <url-pattern>/onepass/sites/get</url-pattern>
+   </servlet-mapping>
+</web-app>
