@@ -27,12 +27,19 @@
 %>    <div id="header">
          <img class="logo" src="/img/logo/infinite_64.png" />
          <span class="title"><%=Application.getApplicationName()%></span>
+         <div class="logout">
+            <table>
+               <tr>
+                  <td><a href="<%=AuthPages.signOut()%>"><img src="/img/action/signout_button.png" title="Sign out"/></td>
+               </tr>
+            </table>
+         </div>
          <div class="user">
             <table>
                <tr>
+                  <td><img src="/img/ico/user_12.png"/></td>
                   <td><%=loggedInUser.getImmutableUserId()%></td>
                   <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/menu/menuopened_lightgray_12.png"/></a></td>
-                  <td><a href="<%=AuthPages.signOut()%>"><img src="/img/action/signout_button.png" title="Sign out"/></td>
                </tr>
             </table>
          </div>

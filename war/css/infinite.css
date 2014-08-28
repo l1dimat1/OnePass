@@ -55,7 +55,7 @@ a:hover {
 }
 
 #header {
-   position: fixed;
+   position: absolute;
    top: 0px;
    box-sizing: border-box;
    width: 800px;
@@ -80,6 +80,15 @@ a:hover {
 	font: 48px Cordia;
 }
 
+#header .logout {
+   position: absolute;
+   top: 0px;
+   right: 0px;
+   margin: auto;
+   padding: 0px;
+   color: #C0C0C0;
+}
+
 #header .user {
    position: absolute;
    top: 42px;
@@ -101,7 +110,7 @@ a:hover {
 }
 
 #toolbar {
-   position: fixed;
+   position: absolute;
    top: 64px;
    display: table;
    box-sizing: border-box;
