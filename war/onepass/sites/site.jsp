@@ -185,7 +185,10 @@ else
                               <div class="cell" style="width: 12px;;"></div>
                               <div class="cell" style="width: 100%;">
                                  <input name="<%=SitesPages.INPUT_SITE_NAME%>" id="<%=SitesPages.INPUT_SITE_NAME%>" value="<%=site.getName(owner)%>" size="122"
-                                          <%=(newSite)?("autofocus"):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_SITE_NAME%>'); return false;"/>
+                                          <%=(newSite)?("autofocus"):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_SITE_NAME%>'); return false;"
+                                          <% if (newSite) { %> onblur="if (this.value == '') {this.value = '<%=site.getName(owner)%>';}"
+                                                               onfocus="if (this.value == '<%=site.getName(owner)%>') {this.value = '';}"<% } %>
+                                          />
                               </div>
                               <div class="cell" style="width: 12px;"></div>
                            </div>
