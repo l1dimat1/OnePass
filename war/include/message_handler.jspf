@@ -1,7 +1,9 @@
-﻿<%@ page import="com.infinite.share.net.http.ServletErrors" %>
+<%@ page import="com.infinite.share.net.http.ServletErrors" %>
 <%@ page import="com.infinite.share.net.http.InfiniteServlet" %>
 
 <% Object errorMsg = request.getAttribute(InfiniteServlet.ATTRIBUTE_ERROR_MESSAGE);
+   if (errorMsg == null)
+      errorMsg = request.getParameter(InfiniteServlet.ATTRIBUTE_ERROR_MESSAGE);
    if (errorMsg != null)
    {
 %>    <div class="error_message">
@@ -9,6 +11,8 @@
       </div>
 <% }
    Object infoMsg = request.getAttribute(InfiniteServlet.ATTRIBUTE_INFO_MESSAGE);
+   if (infoMsg == null)
+      infoMsg = request.getParameter(InfiniteServlet.ATTRIBUTE_INFO_MESSAGE);
    if (infoMsg != null)
    {
 %>    <div class="info_message">

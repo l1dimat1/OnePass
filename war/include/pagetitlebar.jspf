@@ -38,7 +38,7 @@
             <table>
                <tr>
                   <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/ico/user_12.png"/></a></td>
-                  <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><%=loggedInUser.getImmutableUserId()%></a></td>
+                  <td><a href="#" onclick="showHideComponent(logOutMenu); return false;" style="color: #C0C0C0;"><%=loggedInUser.getImmutableUserId()%></a></td>
                   <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/menu/menuopened_lightgray_12.png"/></a></td>
                </tr>
             </table>

@@ -1,6 +1,7 @@
 package com.infinite.share.net.http.auth;
 
 import com.infinite.share.net.http.HomePages;
+import com.infinite.share.net.http.InfiniteServlet;
 
 /********************************************************************************************************************************
  * Helper class for authentication pages.
@@ -55,6 +56,16 @@ public final class AuthPages
    public static String signIn()
    {
       return PAGE_SIGN_IN;
+   }
+
+   /**
+    * Return the URL to the sign in page.
+    * @param message The message to be displayed on the sign in page.
+    * @return The URL to the sign in page.
+    */
+   public static String signIn(final String errorMessage)
+   {
+      return PAGE_SIGN_IN + "?" + InfiniteServlet.ATTRIBUTE_ERROR_MESSAGE + "=" + errorMessage;
    }
 
    /**

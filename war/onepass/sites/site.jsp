@@ -1,3 +1,4 @@
+<%@ page import="com.infinite.onepass.net.http.sites.GetSitePropertyServlet" %>
 <%@ page import="com.infinite.onepass.net.http.sites.SaveSiteServlet" %>
 <%@ page import="com.infinite.onepass.net.http.sites.SitesPages" %>
 <%@ page import="com.infinite.onepass.sites.Site" %>
@@ -84,53 +85,93 @@
          }
       }
 
-      function getImageData(targetField, targetImage)
+      function getImageProperty(targetField, targetImage)
       {
          var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange =
-            function()
-            {
-               if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-               {
-                  document.getElementById(targetField).value = xmlhttp.responseText;
-                  document.getElementById("get" + targetField).src = "/img/action/refresh_12.png";
-                  document.getElementById(targetImage).src = document.getElementById(targetField).value;
-                  document.getElementById(targetImage).style.visibility = 'visible';
-                  document.getElementById(targetImage + "Wrapper").style.visibility = 'visible';
-               }
-            };
+         
+         xmlhttp.onreadystatechange = function() { receiveAndUpdateImageProperty(targetField, targetImage, xmlhttp) };
+         
          var params = "<%=SitesPages.INPUT_SITE_ID%>=<%=site.getSiteId()%>&<%=SitesPages.INPUT_PROPERTY%>=" + targetField;
          xmlhttp.open("POST", "/onepass/sites/get", true);
          xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
          xmlhttp.send(params);
       }
       
-      function getData(targetField)
+      function getTextProperty(targetField)
       {
 	      var xmlhttp = new XMLHttpRequest();
-	      xmlhttp.onreadystatechange =
-	    	   function()
-	         {
-	    	      if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-	            {
-	    	    	   document.getElementById(targetField).style.visibility = 'visible';
-	    	    	   document.getElementById(targetField).value = xmlhttp.responseText;
-	    	    	   document.getElementById("get" + targetField).src = "/img/action/refresh_12.png";
-	            }
-	         };
+	      
+	      xmlhttp.onreadystatechange = function() { receiveAndUpdateTextProperty(targetField, xmlhttp) };
+	      
 	      var params = "<%=SitesPages.INPUT_SITE_ID%>=<%=site.getSiteId()%>&<%=SitesPages.INPUT_PROPERTY%>=" + targetField;
 	      xmlhttp.open("POST", "/onepass/sites/get", true);
 	      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	      xmlhttp.send(params);
       }
 
-      function getAllData()
+      function receiveAndUpdateImageProperty(targetField, targetImage, xmlhttp)
       {
-    	   getData('<%=SitesPages.INPUT_LOGIN%>');
-         getData('<%=SitesPages.INPUT_PASSWORD%>');
-         getData('<%=SitesPages.INPUT_KEY%>');
-         getData('<%=SitesPages.INPUT_COMMENT%>');
-         getImageData('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
+          if (xmlhttp.readyState == 4)
+          {
+             if (xmlhttp.status == 200)
+             {
+                document.getElementById(targetField).value = xmlhttp.responseText;
+                document.getElementById("get" + targetField).src = "/img/action/refresh_12.png";
+                document.getElementById(targetImage).src = document.getElementById(targetField).value;
+                document.getElementById(targetImage).style.visibility = 'visible';
+                document.getElementById(targetImage + "Wrapper").style.visibility = 'visible';
+
+                setTimeout(function() { clearImageProperty(targetField, targetImage) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
+             }
+             else
+             {
+                 window.location = "<%=AuthPages.signOut()%>";
+             }
+          }
+      }
+
+      function receiveAndUpdateTextProperty(targetField, xmlhttp)
+      {
+          if (xmlhttp.readyState == 4)
+          {
+             if (xmlhttp.status == 200)
+             {
+                document.getElementById(targetField).style.visibility = 'visible';
+                document.getElementById(targetField).value = xmlhttp.responseText;
+                document.getElementById("get" + targetField).src = "/img/action/refresh_12.png";
+                
+                setTimeout(function() { clearTextProperty(targetField) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
+             }
+             else
+             {
+                window.location = "<%=AuthPages.signOut()%>";
+             }
+          }
+      }
+      
+      function clearImageProperty(targetField, targetImage)
+      {
+          document.getElementById(targetField).value = "";
+          document.getElementById("get" + targetField).src = "/img/action/download_12.png";
+          document.getElementById(targetImage).src = document.getElementById(targetField).value;
+          document.getElementById(targetImage).style.visibility = 'hidden';
+          document.getElementById(targetImage + "Wrapper").style.visibility = 'hidden';
+      }
+
+      function clearTextProperty(targetField)
+      {
+          document.getElementById(targetField).style.visibility = 'hidden';
+          document.getElementById(targetField).value = "";
+          document.getElementById("get" + targetField).src = "/img/action/download_12.png";
+      }
+
+      function refreshAllProperties()
+      {
+    	   getTextProperty('<%=SitesPages.INPUT_LOGIN%>');
+         getTextProperty('<%=SitesPages.INPUT_PASSWORD%>');
+         getTextProperty('<%=SitesPages.INPUT_KEY%>');
+         getTextProperty('<%=SitesPages.INPUT_COMMENT%>');
+         getImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
          
          document.getElementById("getAll").src = "/img/action/refresh_12.png";
       }
@@ -138,7 +179,7 @@
 </head>
 <% if (edit)
 {%>
-<body onload="getAllData()"><%
+<body onload="refreshAllProperties()"><%
 }
 else
 {%>
@@ -163,7 +204,7 @@ else
                      Site
                      <div class="menu">
                         <img src="/img/action/download_12.png" id="getAll"/>&nbsp;
-                           <a href="#" onclick="getAllData(); return false;">Refresh all</a>&nbsp;&nbsp;&nbsp;
+                           <a href="#" onclick="refreshAllProperties(); return false;">Refresh all</a>&nbsp;&nbsp;&nbsp;
 <%                if (!edit)
                   {
 %>                      <img src="/img/action/edit_12.png"/>&nbsp;
@@ -184,7 +225,7 @@ else
                               <div class="cell" style="width: 60px;">Name</div>
                               <div class="cell" style="width: 12px;;"></div>
                               <div class="cell" style="width: 100%;">
-                                 <input name="<%=SitesPages.INPUT_SITE_NAME%>" id="<%=SitesPages.INPUT_SITE_NAME%>" value="<%=site.getName(owner)%>" size="122"
+                                 <input name="<%=SitesPages.INPUT_SITE_NAME%>" id="<%=SitesPages.INPUT_SITE_NAME%>" value="<%=site.getName(owner)%>" size="102"
                                           <%=(newSite)?("autofocus"):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_SITE_NAME%>'); return false;"
                                           <% if (newSite) { %> onblur="if (this.value == '') {this.value = '<%=site.getName(owner)%>';}"
                                                                onfocus="if (this.value == '<%=site.getName(owner)%>') {this.value = '';}"<% } %>
@@ -196,7 +237,7 @@ else
                               <div class="cell">Reference</div>
                               <div class="cell"></div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_REFERENCE%>" id="<%=SitesPages.INPUT_REFERENCE%>" value="<%=site.getReference(owner)%>" size="122"
+                                 <input name="<%=SitesPages.INPUT_REFERENCE%>" id="<%=SitesPages.INPUT_REFERENCE%>" value="<%=site.getReference(owner)%>" size="102"
                                           <%=(newSite)?(""):("autofocus")%> <%=(edit)?(""):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_REFERENCE%>'); return false;"/>
                               </div>
                               <div class="cell">
@@ -206,12 +247,12 @@ else
                            <div class="row">
                               <div class="cell">Login</div>
                               <div class="cell">
-                                 <a href="#" onclick="getData('<%=SitesPages.INPUT_LOGIN%>'); return false;">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_LOGIN%>'); return false;">
                                     <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_LOGIN%>"/>
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_LOGIN%>" id="<%=SitesPages.INPUT_LOGIN%>" value="" size="122" style="visibility: hidden"
+                                 <input name="<%=SitesPages.INPUT_LOGIN%>" id="<%=SitesPages.INPUT_LOGIN%>" value="" size="102" style="visibility: hidden"
                                           <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_LOGIN%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
@@ -219,12 +260,12 @@ else
                            <div class="row">
                               <div class="cell">Password</div>
                               <div class="cell">
-                                 <a href="#" onclick="getData('<%=SitesPages.INPUT_PASSWORD%>'); return false;">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_PASSWORD%>'); return false;">
                                     <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_PASSWORD%>"/>
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_PASSWORD%>" id="<%=SitesPages.INPUT_PASSWORD%>" value="" size="122" style="visibility: hidden"
+                                 <input name="<%=SitesPages.INPUT_PASSWORD%>" id="<%=SitesPages.INPUT_PASSWORD%>" value="" size="102" style="visibility: hidden"
                                           <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_PASSWORD%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
@@ -232,12 +273,12 @@ else
                            <div class="row">
                               <div class="cell">Key</div>
                               <div class="cell">
-                                 <a href="#" onclick="getData('<%=SitesPages.INPUT_KEY%>'); return false;">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_KEY%>'); return false;">
                                     <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_KEY%>"/>
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_KEY%>" id="<%=SitesPages.INPUT_KEY%>" value="" size="122" style="visibility: hidden"
+                                 <input name="<%=SitesPages.INPUT_KEY%>" id="<%=SitesPages.INPUT_KEY%>" value="" size="102" style="visibility: hidden"
                                           <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_KEY%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
@@ -245,20 +286,20 @@ else
                            <div class="row">
                               <div class="cell">Comment</div>
                               <div class="cell">
-                                 <a href="#" onclick="getData('<%=SitesPages.INPUT_COMMENT%>'); return false;">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_COMMENT%>'); return false;">
                                     <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_COMMENT%>"/>
                                  </a>
                               </div>
                               <div class="cell">
                                  <input name="<%=SitesPages.INPUT_COMMENT%>" id="<%=SitesPages.INPUT_COMMENT%>" value="" style="visibility: hidden"
-                                          <%=(edit)?(""):("readonly")%> size="122" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT%>'); return false;"/>
+                                          <%=(edit)?(""):("readonly")%> size="102" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
                            </div>
                            <div class="row">
                               <div class="cell">Image</div>
                               <div class="cell">
-                                 <a href="#" onclick="getImageData('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage'); return false;">
+                                 <a href="#" onclick="getImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage'); return false;">
                                     <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_IMAGE_STRING%>"/>
                                  </a>
                               </div>
@@ -266,7 +307,7 @@ else
                                  <input id="imageFileBrowser" type="file" accept="image/*" onchange="updateImageFromFile(); return false;" style="display: none"/>
                                  <input name="<%=SitesPages.INPUT_IMAGE_STRING%>" id="<%=SitesPages.INPUT_IMAGE_STRING%>" type="hidden" value=""/>
                                  <div id="siteImageWrapper" class="site_image_wrapper" style="visibility: hidden">
-                                    <a href="#" onclick="getImageData('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage'); return false;">
+                                    <a href="#" onclick="getImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage'); return false;">
                                        <img id="siteImage" class="site_image" style="visibility: hidden" src="" />
                                     </a>
                                  </div>

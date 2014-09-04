@@ -1,4 +1,5 @@
-﻿<%@include file="/include/read_session.jspf"%>
+<%@include file="/include/read_session.jspf"%>
+<%@ page import="com.infinite.share.net.http.InfiniteServlet" %>
 
 <% UserSession.signOut(session);
 %>

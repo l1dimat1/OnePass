@@ -18,7 +18,7 @@
 %>    <div id="toolbar">
          <span>
             <a href="<%=HomePages.welcome()%>" style="width: 60px">Home</a>
-            <a href="#" onclick="window.open('<%=AuthPages.passwordGenerator()%>', 'PasswordGenerator', 'menubar=no,status=no,width=640,height=120');" style="width: 440px">Password Generator</a>
+            <a href="#" onclick="window.open('<%=AuthPages.passwordGenerator()%>', 'PasswordGenerator', 'menubar=no,status=no,width=640,height=120');" style="width: 420px">Password Generator</a>
             <form action="<%=SitesPages.listSites()%>" method="get" autocomplete="off">
                Filter (Ctrl+F):&nbsp;<input type="text" name="<%=SitesPages.INPUT_FILTER%>" id="filter_input" value="<%=filterString%>"/>
                <input type="submit" value="Go"/>

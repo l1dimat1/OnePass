@@ -1,3 +1,3 @@
-﻿<%@include file="/include/signout.jspf"%>
+<%@include file="/include/signout.jspf"%>
 
-<jsp:forward page="<%=AuthPages.signIn()%>" />
+<jsp:forward page='<%=AuthPages.signIn("Session terminated")%>' />

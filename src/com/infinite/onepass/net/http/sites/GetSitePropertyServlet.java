@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class GetSitePropertyServlet extends InfiniteServlet
 {
+   public static final long PROPERTY_DISPLAY_TIMEOUT_MS = 60000;
+   
    /**
     * {@inheritDoc}
     */
@@ -55,12 +57,12 @@ public class GetSitePropertyServlet extends InfiniteServlet
          }
          catch (final GeneralSecurityException e)
          {
-            terminatePlainTextResponse("ERROR", resp);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
          }
       }
       else
       {
-         terminateSignOut(resp);
+         resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       }
    }
 
