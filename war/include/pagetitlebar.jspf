@@ -37,8 +37,8 @@
          <div class="user">
             <table>
                <tr>
-                  <td><img src="/img/ico/user_12.png"/></td>
-                  <td><%=loggedInUser.getImmutableUserId()%></td>
+                  <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/ico/user_12.png"/></a></td>
+                  <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><%=loggedInUser.getImmutableUserId()%></a></td>
                   <td><a href="#" onclick="showHideComponent(logOutMenu); return false;"><img src="/img/menu/menuopened_lightgray_12.png"/></a></td>
                </tr>
             </table>
