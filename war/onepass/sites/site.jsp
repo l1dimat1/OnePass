@@ -121,8 +121,11 @@
                 document.getElementById(targetImage).style.visibility = 'visible';
                 document.getElementById(targetImage + "Wrapper").style.visibility = 'visible';
 
-                setTimeout(function() { clearImageProperty(targetField, targetImage) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
-             }
+<%              if (!edit)
+                {
+%>                 setTimeout(function() { clearImageProperty(targetField, targetImage) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
+<%              }
+%>           }
              else
              {
                  window.location = "<%=AuthPages.signOut()%>";
@@ -140,8 +143,11 @@
                 document.getElementById(targetField).value = xmlhttp.responseText;
                 document.getElementById("get" + targetField).src = "/img/action/refresh_12.png";
                 
-                setTimeout(function() { clearTextProperty(targetField) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
-             }
+<%              if (!edit)
+                {
+%>                 setTimeout(function() { clearTextProperty(targetField) }, <%=GetSitePropertyServlet.PROPERTY_DISPLAY_TIMEOUT_MS%>);
+<%              }
+%>           }
              else
              {
                 window.location = "<%=AuthPages.signOut()%>";
@@ -165,21 +171,28 @@
           document.getElementById("get" + targetField).src = "/img/action/download_12.png";
       }
 
-      function refreshAllProperties()
+      function maskAllProperties()
+      {
+    	   clearTextProperty('<%=SitesPages.INPUT_LOGIN%>');
+    	   clearTextProperty('<%=SitesPages.INPUT_PASSWORD%>');
+    	   clearTextProperty('<%=SitesPages.INPUT_KEY%>');
+    	   clearTextProperty('<%=SitesPages.INPUT_COMMENT%>');
+    	   clearImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
+      }
+      
+      function showAllProperties()
       {
     	   getTextProperty('<%=SitesPages.INPUT_LOGIN%>');
          getTextProperty('<%=SitesPages.INPUT_PASSWORD%>');
          getTextProperty('<%=SitesPages.INPUT_KEY%>');
          getTextProperty('<%=SitesPages.INPUT_COMMENT%>');
          getImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
-         
-         document.getElementById("getAll").src = "/img/action/refresh_12.png";
       }
    </script>
 </head>
 <% if (edit)
 {%>
-<body onload="refreshAllProperties()"><%
+<body onload="showAllProperties()"><%
 }
 else
 {%>
@@ -202,21 +215,23 @@ else
                {
 %>                <div class="title">
                      Site
-                     <div class="menu">
-                        <img src="/img/action/download_12.png" id="getAll"/>&nbsp;
-                           <a href="#" onclick="refreshAllProperties(); return false;">Refresh all</a>&nbsp;&nbsp;&nbsp;
 <%                if (!edit)
                   {
-%>                      <img src="/img/action/edit_12.png"/>&nbsp;
+%>                   <div class="menu">
+                        <img src="/img/action/hide_12.png" id="getAll"/>&nbsp;
+                           <a href="#" onclick="maskAllProperties(); return false;">Mask all</a>&nbsp;&nbsp;&nbsp;
+                        <img src="/img/action/show_12.png" id="getAll"/>&nbsp;
+                           <a href="#" onclick="showAllProperties(); return false;">Show all</a>&nbsp;&nbsp;&nbsp;
+                        <img src="/img/action/edit_12.png"/>&nbsp;
                            <a href="<%=SitesPages.editSite(site, true)%>">Edit Site</a>&nbsp;&nbsp;&nbsp;
                         <img src="/img/action/delete_12.png"/>&nbsp;
                            <a href="#" onclick="deleteSite(); return false;">Delete site</a>
                         <form id="deleteSiteForm" action="/onepass/sites/deletesite" method="post">
                            <input name="<%=SitesPages.INPUT_SITE_ID%>" type="hidden" value="<%=site.getSiteId()%>"/>
                         </form>
+                     </div>
 <%                }
-%>                   </div>
-                  </div>
+%>                </div>
                   <div class="content">
                      <form action="/onepass/sites/savesite" method="post" autocomplete="off">
                         <input name="<%=SitesPages.INPUT_SITE_ID%>" type="hidden" value="<%=site.getSiteId()%>"/>

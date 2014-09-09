@@ -1,4 +1,6 @@
 <%@ page import="com.infinite.share.Application" %>
+<%@ page import="com.infinite.share.auth.UserSession" %>
+<%@ page import="com.infinite.share.net.http.auth.AuthPages" %>
    
    <title><%=Application.getFullApplicationName()%></title>
    <meta http-equiv="Content-Type" content="text/html" />
@@ -6,5 +8,6 @@
    <meta http-equiv="Cache-Control" content="no-cache" />
    <meta http-equiv="Cache-Control" content="max-age=0" />
    <meta http-equiv="Expires" content="0" />
+   <meta http-equiv="refresh" content="<%=UserSession.getAutoSignOutDelayS()%>; URL=<%=AuthPages.signOut()%>">
    <link rel="stylesheet" type="text/css" href="/css/infinite.css" />
    <script type="text/javascript" src="/js/infinite.js"></script>

@@ -17,6 +17,15 @@ public class UserSession
    }
 
    /**
+    * Return the number of second after which any page is automatically redirected to the sign out page.
+    * @return
+    */
+   public static int getAutoSignOutDelayS()
+   {
+      return 10 * 60; // 10 minutes
+   }
+   
+   /**
     * Sign-in the user received in argument.
     * @param session The HTTP session.
     * @param user The user to sign in.
