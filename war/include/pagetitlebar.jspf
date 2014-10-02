@@ -3,6 +3,7 @@
 <%@ page import="com.infinite.share.auth.UserSession" %>
 <%@ page import="com.infinite.share.net.http.HomePages" %>
 <%@ page import="com.infinite.share.net.http.admin.AdminPages" %>
+<%@ page import="com.infinite.share.net.http.admin.SourceManagementPages" %>
 <%@ page import="com.infinite.share.net.http.auth.AuthPages" %>
 
 <% User loggedInUser = ((request.getSession(false) == null) || (UserSession.getUser(session) == null)) ? (null) : (UserSession.getUser(session));
@@ -60,6 +61,10 @@
                <tr>
                   <td><img src="/img/action/lock_12.png"/></td>
                   <td><a href="<%=AuthPages.changePassword()%>">Change Password</a></td>
+               </tr>
+               <tr>
+                  <td><img src="/img/logo/github_12.png"/></td>
+                  <td><a href="<%=SourceManagementPages.homePage()%>" target="_blank">Git Hub</a></td>
                </tr>
                <tr>
                   <td><img src="/img/action/signout_12.png"/></td>

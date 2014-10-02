@@ -5,6 +5,7 @@ import com.infinite.share.Application;
 import com.infinite.share.auth.event.AuthEventManager;
 import com.infinite.share.net.http.HomePages;
 import com.infinite.share.net.http.admin.AdminPages;
+import com.infinite.share.net.http.admin.SourceManagementPages;
 import com.infinite.share.net.mail.EmailAddressFactory;
 import com.infinite.share.net.mail.InfiniteAddressBook;
 
@@ -27,6 +28,8 @@ public final class OnePass implements ServletContextListener
       HomePages.setWelcomePage(SitesPages.listSites());
       AdminPages.setHostConsoleUrl("https://appengine.google.com/dashboard?&app_id=s~infinite-onepass");
       AdminPages.setDatastoreViewerUrl("https://appengine.google.com/datastore/explorer?&app_id=s~infinite-onepass");
+      SourceManagementPages.setGitHubUserName("l1dimat1");
+      SourceManagementPages.setGitHubProject("OnePass");
       InfiniteAddressBook.setNoReplyAddress(EmailAddressFactory.createAddress("no-reply@infinite-onepass.appspotmail.com", "Infinite OnePass"));
       
       AuthEventManager.addAuthListener(OnePassAuthListener.getInstance());

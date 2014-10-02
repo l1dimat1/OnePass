@@ -3,7 +3,7 @@ package com.infinite.share.net.http.admin;
 import com.infinite.share.net.http.HomePages;
 
 /********************************************************************************************************************************
- * Helper class for authentication pages.
+ * Helper class for administration pages.
  ********************************************************************************************************************************/
 public final class AdminPages
 {
