@@ -319,6 +319,19 @@ public class Site implements Persistent, Comparable<Site>
    }
    
    /**
+    * Get the reference property.
+    * @return The reference property.
+    * @throws GeneralSecurityException If an error occurred while decrypting the property.
+    */
+   public final String getReferenceURL(final User owner) throws GeneralSecurityException
+   {
+      final String ref = getReference(owner);
+      if (ref.toLowerCase().indexOf("http") != 0)
+         return "http://" + ref;
+      return ref;
+   }
+   
+   /**
     * Get the login property.
     * @return The login property.
     * @throws GeneralSecurityException If an error occurred while decrypting the property.

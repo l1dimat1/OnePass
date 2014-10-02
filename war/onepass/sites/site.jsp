@@ -256,7 +256,7 @@ else
                                           <%=(newSite)?(""):("autofocus")%> <%=(edit)?(""):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_REFERENCE%>'); return false;"/>
                               </div>
                               <div class="cell">
-                                 <a href="<%=site.getReference(owner)%>" target="_blank"><img src="/img/action/go_12.png" id="goToReference"/></a>
+                                 <a href="<%=site.getReferenceURL(owner)%>" target="_blank"><img src="/img/action/go_12.png" id="goToReference"/></a>
                               </div>
                            </div>
                            <div class="row">
