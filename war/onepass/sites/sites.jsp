@@ -32,13 +32,11 @@
                   <div class="list_table">
                      <div class="title_row">
                         <div class="cell">Site</div>
-                        <div class="cell">Reference</div>
                      </div>
 <%                for (Site site: filteredSites)
                   {
 %>                   <div class="row">
                         <div class="cell"><a href="<%=SitesPages.editSite(site)%>"><%=site.getName(owner)%></a></div>
-                        <div class="cell"><a href="<%=SitesPages.editSite(site)%>"><%=site.getReference(owner)%></a></div>
                      </div>
 <%                }
 %>               </div>
