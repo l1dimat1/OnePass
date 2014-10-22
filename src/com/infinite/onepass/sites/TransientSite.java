@@ -22,7 +22,7 @@ public final class TransientSite extends Site
     */
    public TransientSite(final User owner) throws GeneralSecurityException
    {
-      super(owner, defaultName(), "", "", "", "", "", null);
+      super(owner, defaultName(), "", "", "", "", "", "", "", "", "", null);
    }
 
    /**

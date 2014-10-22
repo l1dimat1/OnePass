@@ -40,8 +40,12 @@ public class SaveSiteServlet extends InfiniteServlet
             final String siteReference = getNonNullParameter(req, SitesPages.INPUT_REFERENCE);
             final String siteLogin     = getNonNullParameter(req, SitesPages.INPUT_LOGIN);
             final String sitePassword  = getNonNullParameter(req, SitesPages.INPUT_PASSWORD);
-            final String siteKey       = getNonNullParameter(req, SitesPages.INPUT_KEY);
-            final String siteComment   = getNonNullParameter(req, SitesPages.INPUT_COMMENT);
+            final String siteKey1      = getNonNullParameter(req, SitesPages.INPUT_KEY1);
+            final String siteKey2      = getNonNullParameter(req, SitesPages.INPUT_KEY2);
+            final String siteKey3      = getNonNullParameter(req, SitesPages.INPUT_KEY3);
+            final String siteComment1  = getNonNullParameter(req, SitesPages.INPUT_COMMENT1);
+            final String siteComment2  = getNonNullParameter(req, SitesPages.INPUT_COMMENT2);
+            final String siteComment3  = getNonNullParameter(req, SitesPages.INPUT_COMMENT3);
             final String siteImageB64  = getNonNullParameter(req, SitesPages.INPUT_IMAGE_STRING, Site.defaultImage());
             
             Site site = Site.restoreFromId(user, siteId);
@@ -50,8 +54,14 @@ public class SaveSiteServlet extends InfiniteServlet
                final String newSiteName = req.getParameter(SitesPages.INPUT_SITE_NAME);
                if (!Site.exist(user, newSiteName))
                {
-                  site = new Site(user, newSiteName, siteReference, siteLogin, sitePassword, siteKey, siteComment, siteImageB64);
-                  site.persistUpdate(user, siteReference, siteLogin, sitePassword, siteKey, siteComment, siteImageB64);
+                  site = new Site(user, newSiteName, siteReference,
+                                          siteLogin, sitePassword,
+                                          siteKey1, siteKey2, siteKey3,
+                                          siteComment1, siteComment2, siteComment3, siteImageB64);
+                  site.persistUpdate(user, siteReference, siteLogin, sitePassword,
+                                          siteKey1, siteKey2, siteKey3,
+                                          siteComment1, siteComment2, siteComment3,
+                                          siteImageB64);
                   terminateRedirect(resp);
                }
                else
@@ -61,7 +71,7 @@ public class SaveSiteServlet extends InfiniteServlet
             }
             else
             {
-               site.persistUpdate(user, siteReference, siteLogin, sitePassword, siteKey, siteComment, siteImageB64);
+               site.persistUpdate(user, siteReference, siteLogin, sitePassword, siteKey1, siteKey2, siteKey3, siteComment1, siteComment2, siteComment3, siteImageB64);
                terminateRedirect(resp);
             }
          }

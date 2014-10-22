@@ -48,10 +48,18 @@ public class GetSitePropertyServlet extends InfiniteServlet
                terminatePlainTextResponse(site.getLogin(user), resp);
             else if (propertyName.equals(SitesPages.INPUT_PASSWORD))
                terminatePlainTextResponse(site.getPassword(user), resp);
-            else if (propertyName.equals(SitesPages.INPUT_KEY))
-               terminatePlainTextResponse(site.getKey(user), resp);
-            else if (propertyName.equals(SitesPages.INPUT_COMMENT))
-               terminatePlainTextResponse(site.getComment(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_KEY1))
+               terminatePlainTextResponse(site.getKey1(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_KEY2))
+               terminatePlainTextResponse(site.getKey2(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_KEY3))
+               terminatePlainTextResponse(site.getKey3(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_COMMENT1))
+               terminatePlainTextResponse(site.getComment1(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_COMMENT2))
+               terminatePlainTextResponse(site.getComment2(user), resp);
+            else if (propertyName.equals(SitesPages.INPUT_COMMENT3))
+               terminatePlainTextResponse(site.getComment3(user), resp);
             else if (propertyName.equals(SitesPages.INPUT_IMAGE_STRING))
                terminatePlainTextResponse(site.getImageB64(user), resp);
          }

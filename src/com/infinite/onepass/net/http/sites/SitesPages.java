@@ -17,8 +17,12 @@ public class SitesPages
    public static final String INPUT_REFERENCE    = "siteReference";
    public static final String INPUT_LOGIN        = "siteLogin";
    public static final String INPUT_PASSWORD     = "sitePassword";
-   public static final String INPUT_KEY          = "siteKey";
-   public static final String INPUT_COMMENT      = "siteComment";
+   public static final String INPUT_KEY1         = "siteKey1";
+   public static final String INPUT_KEY2         = "siteKey2";
+   public static final String INPUT_KEY3         = "siteKey3";
+   public static final String INPUT_COMMENT1     = "siteComment1";
+   public static final String INPUT_COMMENT2     = "siteComment2";
+   public static final String INPUT_COMMENT3     = "siteComment3";
    public static final String INPUT_IMAGE_STRING = "siteImageB64";
    
    public static final int ACTION_VIEW = 0;

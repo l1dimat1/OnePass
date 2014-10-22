@@ -175,8 +175,12 @@
       {
     	   clearTextProperty('<%=SitesPages.INPUT_LOGIN%>');
     	   clearTextProperty('<%=SitesPages.INPUT_PASSWORD%>');
-    	   clearTextProperty('<%=SitesPages.INPUT_KEY%>');
-    	   clearTextProperty('<%=SitesPages.INPUT_COMMENT%>');
+    	   clearTextProperty('<%=SitesPages.INPUT_KEY1%>');
+         clearTextProperty('<%=SitesPages.INPUT_KEY2%>');
+         clearTextProperty('<%=SitesPages.INPUT_KEY3%>');
+    	   clearTextProperty('<%=SitesPages.INPUT_COMMENT1%>');
+         clearTextProperty('<%=SitesPages.INPUT_COMMENT2%>');
+         clearTextProperty('<%=SitesPages.INPUT_COMMENT3%>');
     	   clearImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
       }
       
@@ -184,20 +188,28 @@
       {
     	   getTextProperty('<%=SitesPages.INPUT_LOGIN%>');
          getTextProperty('<%=SitesPages.INPUT_PASSWORD%>');
-         getTextProperty('<%=SitesPages.INPUT_KEY%>');
-         getTextProperty('<%=SitesPages.INPUT_COMMENT%>');
+         getTextProperty('<%=SitesPages.INPUT_KEY1%>');
+         getTextProperty('<%=SitesPages.INPUT_KEY2%>');
+         getTextProperty('<%=SitesPages.INPUT_KEY3%>');
+         getTextProperty('<%=SitesPages.INPUT_COMMENT1%>');
+         getTextProperty('<%=SitesPages.INPUT_COMMENT2%>');
+         getTextProperty('<%=SitesPages.INPUT_COMMENT3%>');
          getImageProperty('<%=SitesPages.INPUT_IMAGE_STRING%>', 'siteImage');
       }
    </script>
 </head>
-<% if (edit)
-{%>
+<%
+   if (edit)
+{
+%>
 <body onload="showAllProperties()"><%
-}
+   }
 else
-{%>
+{
+%>
 <body><%
-}%>
+   }
+%>
    <div id="page">
       <%@include file="/include/pageheader.jspf"%>
       <div id="content_wrapper">
@@ -205,19 +217,21 @@ else
             <div class="box">
                <%@include file="/include/message_handler.jspf"%>
 <%
-               if (site == null)
-               {
+   if (site == null)
+   {
 %>                <div class="error_message">
                      Site not found.
                   </div>
-<%             }
-               else
-               {
+<%
+   }
+   else
+   {
 %>                <div class="title">
                      Site
-<%                if (!edit)
-                  {
-%>                   <div class="menu">
+<%
+                   if (!edit)
+                                      {
+                %>                   <div class="menu">
                         <img src="/img/action/hide_12.png" id="getAll"/>&nbsp;
                            <a href="#" onclick="maskAllProperties(); return false;">Mask all</a>&nbsp;&nbsp;&nbsp;
                         <img src="/img/action/show_12.png" id="getAll"/>&nbsp;
@@ -230,20 +244,21 @@ else
                            <input name="<%=SitesPages.INPUT_SITE_ID%>" type="hidden" value="<%=site.getSiteId()%>"/>
                         </form>
                      </div>
-<%                }
+<%
+   }
 %>                </div>
                   <div class="content">
                      <form action="/onepass/sites/savesite" method="post" autocomplete="off">
                         <input name="<%=SitesPages.INPUT_SITE_ID%>" type="hidden" value="<%=site.getSiteId()%>"/>
                         <div class="list_table">
                            <div class="row">
-                              <div class="cell" style="width: 60px;">Name</div>
+                              <div class="cell" style="width: 65px;">Name</div>
                               <div class="cell" style="width: 12px;;"></div>
                               <div class="cell" style="width: 100%;">
-                                 <input name="<%=SitesPages.INPUT_SITE_NAME%>" id="<%=SitesPages.INPUT_SITE_NAME%>" value="<%=site.getName(owner)%>" size="102"
+                                 <input name="<%=SitesPages.INPUT_SITE_NAME%>" id="<%=SitesPages.INPUT_SITE_NAME%>" value="<%=site.getName(owner)%>" size="120"
                                           <%=(newSite)?("autofocus"):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_SITE_NAME%>'); return false;"
-                                          <% if (newSite) { %> onblur="if (this.value == '') {this.value = '<%=site.getName(owner)%>';}"
-                                                               onfocus="if (this.value == '<%=site.getName(owner)%>') {this.value = '';}"<% } %>
+                                          <%if (newSite) {%> onblur="if (this.value == '') {this.value = '<%=site.getName(owner)%>';}"
+                                                               onfocus="if (this.value == '<%=site.getName(owner)%>') {this.value = '';}"<%}%>
                                           />
                               </div>
                               <div class="cell" style="width: 12px;"></div>
@@ -252,7 +267,7 @@ else
                               <div class="cell">Reference</div>
                               <div class="cell"></div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_REFERENCE%>" id="<%=SitesPages.INPUT_REFERENCE%>" value="<%=site.getReference(owner)%>" size="102"
+                                 <input name="<%=SitesPages.INPUT_REFERENCE%>" id="<%=SitesPages.INPUT_REFERENCE%>" value="<%=site.getReference(owner)%>" size="120"
                                           <%=(newSite)?(""):("autofocus")%> <%=(edit)?(""):("readonly")%> class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_REFERENCE%>'); return false;"/>
                               </div>
                               <div class="cell">
@@ -267,7 +282,7 @@ else
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_LOGIN%>" id="<%=SitesPages.INPUT_LOGIN%>" value="" size="102" style="visibility: hidden"
+                                 <input name="<%=SitesPages.INPUT_LOGIN%>" id="<%=SitesPages.INPUT_LOGIN%>" value="" size="120" style="visibility: hidden"
                                           <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_LOGIN%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
@@ -280,34 +295,86 @@ else
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_PASSWORD%>" id="<%=SitesPages.INPUT_PASSWORD%>" value="" size="102" style="visibility: hidden"
+                                 <input name="<%=SitesPages.INPUT_PASSWORD%>" id="<%=SitesPages.INPUT_PASSWORD%>" value="" size="120" style="visibility: hidden"
                                           <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_PASSWORD%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
                            </div>
                            <div class="row">
-                              <div class="cell">Key</div>
+                              <div class="cell">Key 1</div>
                               <div class="cell">
-                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_KEY%>'); return false;">
-                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_KEY%>"/>
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_KEY1%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_KEY1%>"/>
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_KEY%>" id="<%=SitesPages.INPUT_KEY%>" value="" size="102" style="visibility: hidden"
-                                          <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_KEY%>'); return false;"/>
+                                 <input name="<%=SitesPages.INPUT_KEY1%>" id="<%=SitesPages.INPUT_KEY1%>" value="" size="120" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_KEY1%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
                            </div>
                            <div class="row">
-                              <div class="cell">Comment</div>
+                              <div class="cell">Key 2</div>
                               <div class="cell">
-                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_COMMENT%>'); return false;">
-                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_COMMENT%>"/>
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_KEY2%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_KEY2%>"/>
                                  </a>
                               </div>
                               <div class="cell">
-                                 <input name="<%=SitesPages.INPUT_COMMENT%>" id="<%=SitesPages.INPUT_COMMENT%>" value="" style="visibility: hidden"
-                                          <%=(edit)?(""):("readonly")%> size="102" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT%>'); return false;"/>
+                                 <input name="<%=SitesPages.INPUT_KEY2%>" id="<%=SitesPages.INPUT_KEY2%>" value="" size="120" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_KEY2%>'); return false;"/>
+                              </div>
+                              <div class="cell"></div>
+                           </div>
+                           <div class="row">
+                              <div class="cell">Key 3</div>
+                              <div class="cell">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_KEY3%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_KEY3%>"/>
+                                 </a>
+                              </div>
+                              <div class="cell">
+                                 <input name="<%=SitesPages.INPUT_KEY3%>" id="<%=SitesPages.INPUT_KEY3%>" value="" size="120" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> class="<%=(edit)?("site_property"):("masked_site_property")%>" onclick="selectInputText('<%=SitesPages.INPUT_KEY3%>'); return false;"/>
+                              </div>
+                              <div class="cell"></div>
+                           </div>
+                           <div class="row">
+                              <div class="cell">Comment 1</div>
+                              <div class="cell">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_COMMENT1%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_COMMENT1%>"/>
+                                 </a>
+                              </div>
+                              <div class="cell">
+                                 <input name="<%=SitesPages.INPUT_COMMENT1%>" id="<%=SitesPages.INPUT_COMMENT1%>" value="" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> size="120" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT1%>'); return false;"/>
+                              </div>
+                              <div class="cell"></div>
+                           </div>
+                           <div class="row">
+                              <div class="cell">Comment 2</div>
+                              <div class="cell">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_COMMENT2%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_COMMENT2%>"/>
+                                 </a>
+                              </div>
+                              <div class="cell">
+                                 <input name="<%=SitesPages.INPUT_COMMENT2%>" id="<%=SitesPages.INPUT_COMMENT2%>" value="" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> size="120" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT2%>'); return false;"/>
+                              </div>
+                              <div class="cell"></div>
+                           </div>
+                           <div class="row">
+                              <div class="cell">Comment 3</div>
+                              <div class="cell">
+                                 <a href="#" onclick="getTextProperty('<%=SitesPages.INPUT_COMMENT3%>'); return false;">
+                                    <img src="<%=(edit)?("/img/action/refresh_12.png"):("/img/action/download_12.png")%>" id="get<%=SitesPages.INPUT_COMMENT3%>"/>
+                                 </a>
+                              </div>
+                              <div class="cell">
+                                 <input name="<%=SitesPages.INPUT_COMMENT3%>" id="<%=SitesPages.INPUT_COMMENT3%>" value="" style="visibility: hidden"
+                                          <%=(edit)?(""):("readonly")%> size="120" class="site_property" onclick="selectInputText('<%=SitesPages.INPUT_COMMENT3%>'); return false;"/>
                               </div>
                               <div class="cell"></div>
                            </div>

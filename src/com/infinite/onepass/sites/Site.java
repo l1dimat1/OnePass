@@ -37,12 +37,20 @@ public class Site implements Persistent, Comparable<Site>
     * @param reference The site 'reference' property.
     * @param login The site 'login' property.
     * @param password The site 'password' property.
-    * @param key The site 'key' property.
-    * @param comment The site 'comment' property.
+    * @param key1 The site 'key1' property.
+    * @param key2 The site 'key2' property.
+    * @param key3 The site 'key3' property.
+    * @param comment1 The site 'comment1' property.
+    * @param comment2 The site 'comment2' property.
+    * @param comment3 The site 'comment3' property.
     * @param imageB64 The site 'image' property, as a b64 image.
     * @throws GeneralSecurityException If an error occurred during properties encryption.
     */
-   public Site(final User owner, final String name, final String reference, final String login, final String password, final String key, final String comment, final String imageB64) throws GeneralSecurityException
+   public Site(final User owner, final String name, final String reference,
+                           final String login, final String password,
+                           final String key1, final String key2, final String key3,
+                           final String comment1, final String comment2, final String comment3,
+                           final String imageB64) throws GeneralSecurityException
    {
       if (!owner.isSignedIn())
          throw new IllegalStateException("User not logged in.");
@@ -55,8 +63,12 @@ public class Site implements Persistent, Comparable<Site>
       setReference(reference, owner);
       setLogin    (login,     owner);
       setPassword (password,  owner);
-      setKey      (key,       owner);
-      setComment  (comment,   owner);
+      setKey1     (key1,      owner);
+      setKey2     (key2,      owner);
+      setKey3     (key3,      owner);
+      setComment1 (comment1,  owner);
+      setComment2 (comment2,  owner);
+      setComment3 (comment3,  owner);
       setImageB64 (imageB64,  owner);
       m_primaryKey  = generateDatastoreKey(owner, name);
    }
@@ -73,7 +85,11 @@ public class Site implements Persistent, Comparable<Site>
       m_x_login     = null;
       m_x_password  = null;
       m_x_key       = null;
+      m_x_key2      = null;
+      m_x_key3      = null;
       m_x_comment   = null;
+      m_x_comment2  = null;
+      m_x_comment3  = null;
       m_x_imageB64  = null;
       m_primaryKey  = null;
    }
@@ -171,20 +187,32 @@ public class Site implements Persistent, Comparable<Site>
     * @param reference The (updated) reference
     * @param login The (updated) login
     * @param password The (updated) password
-    * @param key The (updated) key
-    * @param comment The (updated) comment
+    * @param key1 The (updated) key1
+    * @param key2 The (updated) key2
+    * @param key3 The (updated) key3
+    * @param comment1 The (updated) comment1
+    * @param comment2 The (updated) comment3
+    * @param comment3 The (updated) comment2
     * @param imageB64 The (updated) image B64
     * @return The persisted site (this or null if an error occurred).
     * @throws GeneralSecurityException If an exception occurred during properties encryption.
     */
-   public /*final*/ Site persistUpdate(final User owner, final String reference, final String login, final String password, final String key, final String comment, final String imageB64) throws GeneralSecurityException
+   public /*final*/ Site persistUpdate(final User owner, final String reference,
+                           final String login, final String password,
+                           final String key1, final String key2, final String key3,
+                           final String comment1, final String comment2, final String comment3,
+                           final String imageB64) throws GeneralSecurityException
    {
       padName     (getName(owner), owner);
       setReference(reference,      owner);
       setLogin    (login,          owner);
       setPassword (password,       owner);
-      setKey      (key,            owner);
-      setComment  (comment,        owner);
+      setKey1     (key1,           owner);
+      setKey2     (key2,           owner);
+      setKey3     (key3,           owner);
+      setComment1 (comment1,       owner);
+      setComment2 (comment2,       owner);
+      setComment3 (comment3,       owner);
       setImageB64 (imageB64,       owner);
 
       return persistUpdate(owner);
@@ -260,8 +288,12 @@ public class Site implements Persistent, Comparable<Site>
       setReference(getReference(ownerBeforeChange), ownerAfterChange);
       setLogin    (getLogin    (ownerBeforeChange), ownerAfterChange);
       setPassword (getPassword (ownerBeforeChange), ownerAfterChange);
-      setKey      (getKey      (ownerBeforeChange), ownerAfterChange);
-      setComment  (getComment  (ownerBeforeChange), ownerAfterChange);
+      setKey1     (getKey1     (ownerBeforeChange), ownerAfterChange);
+      setKey2     (getKey2     (ownerBeforeChange), ownerAfterChange);
+      setKey3     (getKey3     (ownerBeforeChange), ownerAfterChange);
+      setComment1 (getComment1 (ownerBeforeChange), ownerAfterChange);
+      setComment2 (getComment2 (ownerBeforeChange), ownerAfterChange);
+      setComment3 (getComment3 (ownerBeforeChange), ownerAfterChange);
       setImageB64 (getImageB64 (ownerBeforeChange), ownerAfterChange);
       // m_primaryKey Immutable (never changes once the site is created)
       
@@ -364,11 +396,11 @@ public class Site implements Persistent, Comparable<Site>
    }
    
    /**
-    * Get the key property.
-    * @return The key property.
+    * Get the key1 property.
+    * @return The key1 property.
     * @throws GeneralSecurityException If an error occurred while decrypting the property.
     */
-   public final String getKey(final User owner) throws GeneralSecurityException
+   public final String getKey1(final User owner) throws GeneralSecurityException
    {
       if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
          throw new IllegalArgumentException("Not owner of site.");
@@ -380,11 +412,43 @@ public class Site implements Persistent, Comparable<Site>
    }
    
    /**
-    * Get the comment property.
+    * Get the key2 property.
+    * @return The key2 property.
+    * @throws GeneralSecurityException If an error occurred while decrypting the property.
+    */
+   public final String getKey2(final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (m_x_key2 == null)
+         return "";
+      return fromPaddedUTF8Bytes(SymmetricEncryption.getEngine().decrypt(m_x_key2, owner.getSecretKey()));
+   }
+   
+   /**
+    * Get the key2 property.
+    * @return The key2 property.
+    * @throws GeneralSecurityException If an error occurred while decrypting the property.
+    */
+   public final String getKey3(final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (m_x_key3 == null)
+         return "";
+      return fromPaddedUTF8Bytes(SymmetricEncryption.getEngine().decrypt(m_x_key3, owner.getSecretKey()));
+   }
+   
+   /**
+    * Get the comment1 property.
     * @return The comment property.
     * @throws GeneralSecurityException If an error occurred while decrypting the property.
     */
-   public final String getComment(final User owner) throws GeneralSecurityException
+   public final String getComment1(final User owner) throws GeneralSecurityException
    {
       if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
          throw new IllegalArgumentException("Not owner of site.");
@@ -393,6 +457,38 @@ public class Site implements Persistent, Comparable<Site>
       if (m_x_comment == null)
          return "";
       return fromPaddedUTF8Bytes(SymmetricEncryption.getEngine().decrypt(m_x_comment, owner.getSecretKey()));
+   }
+   
+   /**
+    * Get the comment2 property.
+    * @return The comment2 property.
+    * @throws GeneralSecurityException If an error occurred while decrypting the property.
+    */
+   public final String getComment2(final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (m_x_comment2 == null)
+         return "";
+      return fromPaddedUTF8Bytes(SymmetricEncryption.getEngine().decrypt(m_x_comment2, owner.getSecretKey()));
+   }
+   
+   /**
+    * Get the comment3 property.
+    * @return The comment3 property.
+    * @throws GeneralSecurityException If an error occurred while decrypting the property.
+    */
+   public final String getComment3(final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (m_x_comment3 == null)
+         return "";
+      return fromPaddedUTF8Bytes(SymmetricEncryption.getEngine().decrypt(m_x_comment3, owner.getSecretKey()));
    }
    
    /**
@@ -440,7 +536,11 @@ public class Site implements Persistent, Comparable<Site>
    @Basic                 private byte[]    m_x_login;
    @Basic                 private byte[]    m_x_password;
    @Basic                 private byte[]    m_x_key;
+   @Basic                 private byte[]    m_x_key2;
+   @Basic                 private byte[]    m_x_key3;
    @Basic                 private byte[]    m_x_comment;
+   @Basic                 private byte[]    m_x_comment2;
+   @Basic                 private byte[]    m_x_comment3;
    @Basic                 private Blob      m_x_imageB64;
 
    /**
@@ -572,12 +672,12 @@ public class Site implements Persistent, Comparable<Site>
    }
    
    /**
-    * Set the key property.
-    * @param value The key property.
+    * Set the key1 property.
+    * @param value The key1 property.
     * @param owner This site's owner
     * @throws GeneralSecurityException If an error occurred while encrypting the property.
     */
-   private final void setKey(String value, final User owner) throws GeneralSecurityException
+   private final void setKey1(String value, final User owner) throws GeneralSecurityException
    {
       if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
          throw new IllegalArgumentException("Not owner of site.");
@@ -589,12 +689,46 @@ public class Site implements Persistent, Comparable<Site>
    }
    
    /**
-    * Set the comment property.
-    * @param value The comment property.
+    * Set the key2 property.
+    * @param value The key2 property.
     * @param owner This site's owner
     * @throws GeneralSecurityException If an error occurred while encrypting the property.
     */
-   private final void setComment(String value, final User owner) throws GeneralSecurityException
+   private final void setKey2(String value, final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (value == null)
+         value = "";
+      m_x_key2 = SymmetricEncryption.getEngine().encrypt(toPaddedUTF8Bytes(value), owner.getSecretKey());
+   }
+   
+   /**
+    * Set the key3 property.
+    * @param value The key3 property.
+    * @param owner This site's owner
+    * @throws GeneralSecurityException If an error occurred while encrypting the property.
+    */
+   private final void setKey3(String value, final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (value == null)
+         value = "";
+      m_x_key3 = SymmetricEncryption.getEngine().encrypt(toPaddedUTF8Bytes(value), owner.getSecretKey());
+   }
+   
+   /**
+    * Set the comment1 property.
+    * @param value The comment1 property.
+    * @param owner This site's owner
+    * @throws GeneralSecurityException If an error occurred while encrypting the property.
+    */
+   private final void setComment1(String value, final User owner) throws GeneralSecurityException
    {
       if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
          throw new IllegalArgumentException("Not owner of site.");
@@ -603,6 +737,40 @@ public class Site implements Persistent, Comparable<Site>
       if (value == null)
          value = "";
       m_x_comment = SymmetricEncryption.getEngine().encrypt(toPaddedUTF8Bytes(value), owner.getSecretKey());
+   }
+   
+   /**
+    * Set the comment2 property.
+    * @param value The comment2 property.
+    * @param owner This site's owner
+    * @throws GeneralSecurityException If an error occurred while encrypting the property.
+    */
+   private final void setComment2(String value, final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (value == null)
+         value = "";
+      m_x_comment2 = SymmetricEncryption.getEngine().encrypt(toPaddedUTF8Bytes(value), owner.getSecretKey());
+   }
+   
+   /**
+    * Set the comment3 property.
+    * @param value The comment3 property.
+    * @param owner This site's owner
+    * @throws GeneralSecurityException If an error occurred while encrypting the property.
+    */
+   private final void setComment3(String value, final User owner) throws GeneralSecurityException
+   {
+      if ((owner == null) || !owner.getUniqueId().equals(m_ownerId))
+         throw new IllegalArgumentException("Not owner of site.");
+      if (!owner.isSignedIn())
+         throw new IllegalStateException("Owner not logged in.");
+      if (value == null)
+         value = "";
+      m_x_comment3 = SymmetricEncryption.getEngine().encrypt(toPaddedUTF8Bytes(value), owner.getSecretKey());
    }
    
    /**

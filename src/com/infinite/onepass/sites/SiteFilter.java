@@ -34,10 +34,8 @@ public class SiteFilter
          {
             final String name      = site.getName     (owner);
             final String reference = site.getReference(owner);
-            final String comment   = site.getComment  (owner);
             if (((name      != null) && name     .toLowerCase().contains(lcFilterString)) ||
-                ((reference != null) && reference.toLowerCase().contains(lcFilterString)) ||
-                ((comment   != null) && comment  .toLowerCase().contains(lcFilterString)))
+                ((reference != null) && reference.toLowerCase().contains(lcFilterString)))
                filteredSites.add(site);
          }
          catch (final GeneralSecurityException e)
