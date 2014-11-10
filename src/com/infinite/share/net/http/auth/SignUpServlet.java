@@ -34,7 +34,7 @@ public class SignUpServlet extends InfiniteServlet
     */
    public void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws IOException
    {
-      final String inviterId     = req.getParameter(AuthPages.INPUT_INVITER_ID);
+      final String inviterName   = req.getParameter(AuthPages.INPUT_INVITER_ID);
       final String emailAddress  = req.getParameter(AuthPages.INPUT_EMAIL);
       final String displayName   = req.getParameter(AuthPages.INPUT_DISPLAY_NAME);
       final String invitationKey = req.getParameter(AuthPages.INPUT_INVITATION_KEY);
@@ -43,7 +43,7 @@ public class SignUpServlet extends InfiniteServlet
       final String password2     = req.getParameter(AuthPages.INPUT_PASSWORD2);
       
       if (isAValidUserId(userId, req, resp) && isAValidPassword(password1, password2, req, resp) && isPublicInfoValid(displayName, emailAddress, req, resp) &&
-                              (User.isAdministratorUserId(userId) || isInvitationKeyCorrect(inviterId, emailAddress, invitationKey, req, resp)))
+                              (User.isAdministratorUserId(userId) || isInvitationKeyCorrect(inviterName, emailAddress, invitationKey, req, resp)))
       {
          try
          {
@@ -126,7 +126,7 @@ public class SignUpServlet extends InfiniteServlet
    /**
     * Verify that the invitation key is correct, i.e. that it corresponds to a non-expired invitation key stored in DB for this email address and inviter's id.
     * In case it is not, abort with an error message 
-    * @param inviterId The inviter id.
+    * @param inviterName The inviter's name.
     * @param emailAddress The email address.
     * @param invitationKey The invitation key.
     * @param req The http request
@@ -134,9 +134,9 @@ public class SignUpServlet extends InfiniteServlet
     * @return True if the invitation key is correct.
     * @throws IOException
     */
-   private boolean isInvitationKeyCorrect(final String inviterId, final String emailAddress, final String invitationKey, final HttpServletRequest req, final HttpServletResponse resp) throws IOException
+   private boolean isInvitationKeyCorrect(final String inviterName, final String emailAddress, final String invitationKey, final HttpServletRequest req, final HttpServletResponse resp) throws IOException
    {
-      if ((inviterId == null) || inviterId.isEmpty())
+      if ((inviterName == null) || inviterName.isEmpty())
       {
          terminateAbort("Inviter's name not set.", req, resp);
          return false;
@@ -149,7 +149,7 @@ public class SignUpServlet extends InfiniteServlet
       
       try
       {
-         final Invitation invitation = Invitation.restore(invitationKey, inviterId, emailAddress);
+         final Invitation invitation = Invitation.restore(invitationKey, inviterName, emailAddress);
          if (invitation == null)
          {
             terminateAbort("Invitation key not valid.", req, resp);

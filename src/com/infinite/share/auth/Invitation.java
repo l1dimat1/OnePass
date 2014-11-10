@@ -49,7 +49,7 @@ public final class Invitation implements Persistent
    {
       if (!EmailAddressFactory.verifyAddressFormat(inviteeEmailAddress))
          throw new IllegalArgumentException("Email address format not correct.");
-      m_inviteName           = inviteName;
+      m_inviteName          = inviteName;
       m_inviteeEmailAddress = inviteeEmailAddress;
       m_primaryKey          = generateDatastoreKey(generateInvitationKey());
       m_h_verificationCode  = generateVerificationCode();
@@ -346,7 +346,7 @@ public final class Invitation implements Persistent
     */
    private void postLoad(final String inviterName, final String inviteeEmailAddress) throws GeneralSecurityException
    {
-      m_inviteName           = inviterName;
+      m_inviteName          = inviterName;
       m_inviteeEmailAddress = inviteeEmailAddress;
       m_secretKey           = generateSecretKey();
    }
