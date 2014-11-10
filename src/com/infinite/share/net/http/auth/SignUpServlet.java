@@ -138,7 +138,7 @@ public class SignUpServlet extends InfiniteServlet
    {
       if ((inviterId == null) || inviterId.isEmpty())
       {
-         terminateAbort("Inviter id not set.", req, resp);
+         terminateAbort("Inviter's name not set.", req, resp);
          return false;
       }
       if ((invitationKey == null) || invitationKey.isEmpty())

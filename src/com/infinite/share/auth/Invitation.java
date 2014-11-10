@@ -41,15 +41,15 @@ public final class Invitation implements Persistent
 {  
    /**
     * Generates a new invitation key, and instantiates a new invitation.
-    * @param inviterId The id of the user issuing the invitation.
+    * @param inviteName The id of the user issuing the invitation.
     * @param inviteeEmailAddress The email address to which the invitation will be sent, and with which the invitee will have to sign-up.
     * @throws GeneralSecurityException If a security exception occurred during the email address or the expiration time encryption.
     */
-   public Invitation(final String inviterId, final String inviteeEmailAddress) throws GeneralSecurityException
+   public Invitation(final String inviteName, final String inviteeEmailAddress) throws GeneralSecurityException
    {
       if (!EmailAddressFactory.verifyAddressFormat(inviteeEmailAddress))
          throw new IllegalArgumentException("Email address format not correct.");
-      m_inviterId           = inviterId;
+      m_inviteName           = inviteName;
       m_inviteeEmailAddress = inviteeEmailAddress;
       m_primaryKey          = generateDatastoreKey(generateInvitationKey());
       m_h_verificationCode  = generateVerificationCode();
@@ -65,7 +65,7 @@ public final class Invitation implements Persistent
     */
    public Invitation(final User inviter, final String inviteeEmailAddress) throws GeneralSecurityException
    {
-      this(inviter.getImmutableUserId(), inviteeEmailAddress);
+      this(inviter.getDisplayName(), inviteeEmailAddress);
    }
 
    /**
@@ -84,20 +84,20 @@ public final class Invitation implements Persistent
    /**
     * Load user data from the datastore, and put it in a new user instance. 
     * @param invitationUniqueKey The invitation key.
-    * @param inviterId The id of the user who issued the invitation.
+    * @param inviterName The name of the user who issued the invitation.
     * @param inviteeEmailAddress The email address of the user trying to sign up with this invitation key.
     * @return The invitation object, restored from datastore, or null if an error occurred.
     * @throws IncorrectKeyException In case the email address provided are incorrect.
     * @throws GeneralSecurityException In case the secret key could not be generated.
     */
-   public static Invitation restore(final String invitationUniqueKey, final String inviterId, final String inviteeEmailAddress) throws GeneralSecurityException, IncorrectKeyException
+   public static Invitation restore(final String invitationUniqueKey, final String inviterName, final String inviteeEmailAddress) throws GeneralSecurityException, IncorrectKeyException
    {
       final Key uniqueKey = generateDatastoreKey(invitationUniqueKey);
       Invitation invitation = DatastoreTools.selectOne(Invitation.class, uniqueKey);
 
       if (invitation != null)
       {
-         invitation.postLoad(inviterId, inviteeEmailAddress);
+         invitation.postLoad(inviterName, inviteeEmailAddress);
          
          if (!invitation.isEmailAddressCorrect(inviteeEmailAddress))
             throw new IncorrectKeyException("The email address does not correspond to this invitation key.");
@@ -150,7 +150,7 @@ public final class Invitation implements Persistent
       if ((m_h_verificationCode == null) || (m_h_verificationCode.length == 0))
          throw new IllegalStateException("The verification code is not set");
 
-      return Arrays.equals(generateVerificationCode(m_inviterId, inviteeEmailAddress, getSalt()), m_h_verificationCode);
+      return Arrays.equals(generateVerificationCode(m_inviteName, inviteeEmailAddress, getSalt()), m_h_verificationCode);
    }
 
    /**
@@ -180,13 +180,13 @@ public final class Invitation implements Persistent
    {
       try
       {
-         final String signUpUrl = AuthPages.signUp(getInvitationKey(), m_inviterId, m_inviteeEmailAddress, true);
+         final String signUpUrl = AuthPages.signUp(getInvitationKey(), m_inviteName, m_inviteeEmailAddress, true);
          MimeMessage msg = MimeMessageBuilder.newInstance()
                                  .setSender(InfiniteAddressBook.noReplyAddress())
                                  .addToRecipient(EmailAddressFactory.createAddress(m_inviteeEmailAddress))
                                  .setSubject("[" + Application.getFullApplicationName() + "] Invitation to join " + Application.getFullApplicationName())
                                  .setHtmlContent("Hello<br><br>"
-                                               + m_inviterId + " would like to invite you to join Infinite.<br><br>"
+                                               + m_inviteName + " would like to invite you to join Infinite.<br><br>"
                                                + "To join, simply click <a href=\"" + signUpUrl + "\">here</a>, and sign-up using this email address.<br><br>"
                                                + "In case the above link does not work, you can copy and paste the below URL to your favorite Web browser:<br>"
                                                + "---------------- do not copy this line ----------------<br>"
@@ -218,7 +218,7 @@ public final class Invitation implements Persistent
    private static final int EXPIRY_RANDOMNESS_IN_MS = 60 * 60 * 1000;   // 1h
    private static final int DELETION_RANDOMNESS_IN_MS = 10 * 24 * 60 * 60 * 1000;   // 10 days
 
-   @Transient             private String    m_inviterId;
+   @Transient             private String    m_inviteName;
    @Transient             private String    m_inviteeEmailAddress;
    @Transient             private SecretKey m_secretKey;
    @Id                    private Key       m_primaryKey;
@@ -306,26 +306,26 @@ public final class Invitation implements Persistent
     */
    private SecretKey generateSecretKey() throws GeneralSecurityException
    {
-      if ((m_inviterId == null) || m_inviterId.isEmpty())
+      if ((m_inviteName == null) || m_inviteName.isEmpty())
          throw new IllegalStateException("The inviter id is either null or empty.");
       if ((m_inviteeEmailAddress == null) || m_inviteeEmailAddress.isEmpty())
          throw new IllegalStateException("The invitee's email address is either null or empty.");
       if (m_primaryKey == null)
          throw new IllegalStateException("Invitation unique key is not set.");
 
-      return SymmetricEncryption.getEngine().generateSecretKey((m_inviterId + m_inviteeEmailAddress).toCharArray(), getSalt());
+      return SymmetricEncryption.getEngine().generateSecretKey((m_inviteName + m_inviteeEmailAddress).toCharArray(), getSalt());
    }
 
    /**
     * Generates the unique verification code corresponding to this invitation's inviter, invitee's email address and invitation code.
-    * @param inviterId The id of the user sending the invitation.
+    * @param inviteName The name of the user sending the invitation.
     * @param inviteeEmailAddress The email address to which this invitation will be sent.
     * @param salt The salt of this invitation.
     * @return The verification code.
     */
-   private static byte[] generateVerificationCode(final String inviterId, final String inviteeEmailAddress, final byte[] salt)
+   private static byte[] generateVerificationCode(final String inviteName, final String inviteeEmailAddress, final byte[] salt)
    {
-      return HashFunctions.getSecureHashInstance().hash(Salt.salt(ByteTools.toUTF8Bytes(inviterId + inviteeEmailAddress), salt));
+      return HashFunctions.getSecureHashInstance().hash(Salt.salt(ByteTools.toUTF8Bytes(inviteName + inviteeEmailAddress), salt));
    }
 
    /**
@@ -334,19 +334,19 @@ public final class Invitation implements Persistent
     */
    private byte[] generateVerificationCode()
    {
-      return generateVerificationCode(m_inviterId, m_inviteeEmailAddress, getSalt());
+      return generateVerificationCode(m_inviteName, m_inviteeEmailAddress, getSalt());
    }
    
    /**
     * Method that <b>must absolutely be called after reloading</b> an invitation from DB, in order to make sure that all non-persistent
     * members are correctly populated.
-    * @param inviterId The user id of the inviter
+    * @param inviterName The name of the inviter
     * @param inviteeEmailAddress The email address to which the invitation is sent
     * @throws GeneralSecurityException If the secret key could not be generated.
     */
-   private void postLoad(final String inviterId, final String inviteeEmailAddress) throws GeneralSecurityException
+   private void postLoad(final String inviterName, final String inviteeEmailAddress) throws GeneralSecurityException
    {
-      m_inviterId           = inviterId;
+      m_inviteName           = inviterName;
       m_inviteeEmailAddress = inviteeEmailAddress;
       m_secretKey           = generateSecretKey();
    }

@@ -89,19 +89,19 @@ public final class AuthPages
    /**
     * Create and return the sign-up URL given an invitation.
     * @param invitationKey The invitation key.
-    * @param inviterId The id of the user sending the invitation.
+    * @param inviterName The name of the user sending the invitation.
     * @param inviteeEmailAddress The email address of the person being invited.
     * @param absolutePath If true, the method returns the full, absolute URL. Otherwise, returns the URL relative to the site's root. 
     * @return The sign-up URL. 
     */
-   public static String signUp(final String invitationKey, final String inviterId, final String inviteeEmailAddress, final boolean absolutePath)
+   public static String signUp(final String invitationKey, final String inviterName, final String inviteeEmailAddress, final boolean absolutePath)
    {
       StringBuilder urlBuilder = new StringBuilder();
       if (absolutePath)
          urlBuilder.append(HomePages.root());
       urlBuilder.append(PAGE_SIGN_UP);
       urlBuilder.append("?").append(AuthPages.INPUT_EMAIL         ).append("=").append(inviteeEmailAddress);
-      urlBuilder.append("&").append(AuthPages.INPUT_INVITER_ID    ).append("=").append(inviterId);
+      urlBuilder.append("&").append(AuthPages.INPUT_INVITER_ID    ).append("=").append(inviterName);
       urlBuilder.append("&").append(AuthPages.INPUT_INVITATION_KEY).append("=").append(invitationKey);
       return urlBuilder.toString();
    }

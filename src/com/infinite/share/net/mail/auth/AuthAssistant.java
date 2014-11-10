@@ -65,7 +65,7 @@ public class AuthAssistant
                                  .setSubject("[" + Application.getFullApplicationName() + "] Welcome to " + Application.getFullApplicationName())
                                  .setHtmlContent("Hello<br>"
                                                + "Congratulations, you have successfully sign-up to " + Application.getFullApplicationName() + ".<br><br>"
-                                               + "Your user id is: " + newUser.getImmutableUserId() + "<br><br>"
+                                               + "Your user id is: " + newUser.getDisplayName() + "<br><br>"
                                                + "See you soon on <a href=\"" + HomePages.home(true) + "\">" + Application.getFullApplicationName() + "</a>!<br><br>"
                                                + "The " + Application.getFullApplicationName() + " team")
                                  .build();
@@ -96,7 +96,7 @@ public class AuthAssistant
          }
          catch (final GeneralSecurityException e)
          {
-            return "User " + newUser.getImmutableUserId() + " successfully registered. Unexception error while retrieving newUser's email address.";
+            return "User " + newUser.getImmutableUserId() + " successfully registered. Unhandled error while retrieving newUser's email address.";
          }
       }
       return "User " + newUser.getImmutableUserId() + " successfully registered.";
